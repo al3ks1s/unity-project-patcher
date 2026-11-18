@@ -207,6 +207,8 @@ namespace Nomnom.UnityProjectPatcher.AssetRipper {
         public Import Import = new Import {
             scriptContentLevel = ScriptContentLevel.Level2,
             streamingAssetsMode = StreamingAssetsMode.Extract,
+            targetVersion = "0.0.0a0",
+            defaultVersion = "0.0.0a0",
         };
 
         [SerializeField]
@@ -236,6 +238,15 @@ namespace Nomnom.UnityProjectPatcher.AssetRipper {
         [JsonProperty("BundledAssetsExportMode")]
         [Tooltip("GroupByAssetType: Bundled assets are treated the same as assets from other files.\n\nGroupByBundleName: Bundled assets are grouped by their asset bundle name.\n\nDirectExport: Bundled assets are exported without grouping.")]
         public BundledAssetsExportMode bundledAssetsExportMode;
+
+        [JsonProperty("TargetVersion")]
+        [Tooltip("TargetVersion: Target Version For Version Changing")]
+        public string targetVersion;
+        
+        [JsonProperty("DefaultVersion")]
+        [Tooltip("DefaultVersion")]
+        public string defaultVersion;
+
     }
 
     [Serializable]
