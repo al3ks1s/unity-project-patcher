@@ -26,7 +26,7 @@ namespace Nomnom.UnityProjectPatcher.Editor.Steps {
             var packages = settings.ExactPackagesFound;
             var gitPackages = settings.GitPackages;
             var allPackages = packages
-                .Concat(gitPackages.Select(x => new FoundPackageInfo(x.version, null, null, PackageMatchType.Exact)))
+                // .Concat(gitPackages.Select(x => new FoundPackageInfo(x.version, null, null, PackageMatchType.Exact))) 
                 .ToArray();
             // var gitPackages = settings.GitPackages;
 
@@ -34,6 +34,7 @@ namespace Nomnom.UnityProjectPatcher.Editor.Steps {
             //     .Select(x => x.ToString())
             //     .Concat(gitPackages.Select(x => x.ToString()))
             //     .ToArray();
+
             
             EditorUtility.DisplayProgressBar("Installing packages", "Checking if packages are already installed", 0.25f);
             try {
@@ -49,6 +50,10 @@ namespace Nomnom.UnityProjectPatcher.Editor.Steps {
                 var missingPackages = allPackages
                     .Where(x => packageList.Result.All(y => y.name != x.name))
                     .Select(x => x.ToString())
+                    .Concat(gitPackages
+                        .Where(x => packageList.Result.All(y => y.name != x.name))
+                        .Select(x => x.version)
+                    )
                     .ToArray();
 
                 if (!missingPackages.Any()) {
@@ -90,10 +95,14 @@ namespace Nomnom.UnityProjectPatcher.Editor.Steps {
                         throw new Exception($"Failed to list packages! [{packageList.Error.errorCode}] {packageList.Error.message}");
                     }
                 }
-                
+
                 missingPackages = allPackages
                     .Where(x => packageList.Result.All(y => y.name != x.name))
                     .Select(x => x.ToString())
+                    .Concat(gitPackages
+                        .Where(x => packageList.Result.All(y => y.name != x.name))
+                        .Select(x => x.version)
+                    )
                     .ToArray();
 
                 if (!missingPackages.Any()) {
